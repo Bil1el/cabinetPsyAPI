@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+#[Fillable('psychologist_id', 'starts_at', 'ends_at', 'reason')]
+class PsychologistAbsence extends Model
+{
+    use HasFactory;
+
+    protected function casts(): array
+    {
+        return ['starts_at' => 'datetime', 'ends_at' => 'datetime'];
+    }
+
+    public function psychologist(): BelongsTo
+    {
+        return $this->belongsTo(Psychologist::class);
+    }
+}
