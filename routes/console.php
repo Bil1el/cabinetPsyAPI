@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schedule;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -44,3 +45,11 @@ Artisan::command('app:create-admin', function () {
     $admin->forceFill(['email_verified_at' => now()])->save();
     $this->info('Compte administrateur local créé.');
 })->purpose('Create a local development administrator account');
+
+Schedule::command('auth:clear-resets')
+    ->dailyAt('02:15')
+    ->withoutOverlapping();
+
+Schedule::command('queue:prune-failed --hours=720')
+    ->dailyAt('02:30')
+    ->withoutOverlapping();

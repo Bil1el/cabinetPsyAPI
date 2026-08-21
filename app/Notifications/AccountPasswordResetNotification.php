@@ -22,6 +22,6 @@ class AccountPasswordResetNotification extends Notification implements ShouldQue
     {
         $url = rtrim((string) config('app.frontend_url'), '/').'/mot-de-passe/reinitialiser?token='.urlencode($this->token).'&email='.urlencode($notifiable->email);
 
-        return (new MailMessage)->subject('Réinitialisation de mot de passe')->line('Un lien de réinitialisation a été demandé pour votre compte.')->action('Réinitialiser mon mot de passe', $url)->line('Ce lien expire dans 60 minutes.');
+        return (new MailMessage)->subject('Réinitialisation de mot de passe')->greeting('Bonjour,')->line('Un lien de réinitialisation a été demandé pour votre compte.')->action('Réinitialiser mon mot de passe', $url)->line('Ce lien expire dans 60 minutes.');
     }
 }

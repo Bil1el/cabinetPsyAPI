@@ -22,6 +22,6 @@ class ConfirmEmailChangeNotification extends Notification implements ShouldQueue
     {
         $url = rtrim((string) config('app.frontend_url'), '/').'/email/confirm?token='.urlencode($this->token);
 
-        return (new MailMessage)->subject('Confirmez votre nouvelle adresse email')->line('Confirmez cette adresse pour l’utiliser avec votre compte professionnel.')->action('Confirmer mon adresse', $url)->line('Ce lien expire dans 24 heures.');
+        return (new MailMessage)->subject('Confirmez votre nouvelle adresse email')->greeting('Bonjour,')->line('Confirmez cette adresse pour l’utiliser avec votre compte professionnel.')->action('Confirmer mon adresse', $url)->line('Ce lien expire dans 24 heures.');
     }
 }

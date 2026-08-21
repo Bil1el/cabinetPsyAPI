@@ -31,7 +31,15 @@ DB_CONNECTION=sqlite DB_DATABASE=:memory: php artisan test
 vendor/bin/pint --test
 ```
 
-La suite de concurrence utilise exclusivement la base MySQL dédiée `cabinetpsy_testing_mysql` et l’utilisateur restreint `cabinetpsy_concurrency_test`. Son mot de passe doit être fourni localement par `MYSQL_CONCURRENCY_TEST_PASSWORD` et `DB_PASSWORD`, sans être ajouté au dépôt :
+La suite de concurrence utilise exclusivement la base MySQL dédiée `cabinetpsy_testing_mysql` et l’utilisateur restreint `cabinetpsy_concurrency_test`. Définissez uniquement `MYSQL_CONCURRENCY_TEST_PASSWORD` dans votre `.env` local, avec le mot de passe de cet utilisateur (jamais dans Git). Lorsqu’elle est activée, la configuration de test sélectionne explicitement cette variable au lieu de `DB_PASSWORD` :
+
+```sql
+CREATE DATABASE cabinetpsy_testing_mysql CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'cabinetpsy_concurrency_test'@'%' IDENTIFIED BY '<mot-de-passe-de-test-dédié>';
+GRANT ALL PRIVILEGES ON cabinetpsy_testing_mysql.* TO 'cabinetpsy_concurrency_test'@'%';
+```
+
+Ces droits sont nécessaires aux migrations isolées de la suite, et ne s’appliquent à aucune autre base.
 
 ```bash
 vendor/bin/phpunit -c phpunit.mysql-concurrency.xml
