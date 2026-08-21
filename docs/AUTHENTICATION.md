@@ -39,7 +39,7 @@ The authenticated user must be deterministically associated with the appropriate
 
 ## Account lifecycle
 
-Professional accounts use `users.status`: `invited`, `active`, or `suspended`. An `active`, email-verified psychologist profile can authenticate and use its private workspace. An `active`, email-verified admin may authenticate for cabinet administration without a psychologist profile; it cannot thereby access psychologist-owned operational data. `psychologists.is_active` is deliberately separate: it governs public visibility and bookability, not dashboard access.
+Professional accounts use `users.status`: `invited`, `active`, or `suspended`. An `active`, email-verified psychologist profile can authenticate and use its private workspace. An `active`, email-verified admin may authenticate for cabinet administration without a psychologist profile; it cannot thereby access psychologist-owned operational data. Public availability and booking require both an active user account and `psychologists.is_active=true`; the latter is the profile-level public visibility/bookability switch and does not grant dashboard access.
 
 There is no public professional registration endpoint. An authenticated admin creates an invitation; it creates or refreshes an invited psychologist account and an inactive public profile. Invitation tokens are cryptographically random, stored only as SHA-256 hashes, expire after 48 hours, can be revoked, and are single use. Acceptance sets a Laravel-hashed password, `email_verified_at`, account status to `active`, and the invitation acceptance timestamp.
 

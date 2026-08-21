@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Public;
 
 use App\DTOs\Appointment\StoreAppointmentDTO;
+use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PublicStoreAppointmentRequest;
 use App\Http\Resources\PublicAppointmentResource;
@@ -17,6 +18,7 @@ class PublicAppointmentController extends Controller
     {
         $psychologist = Psychologist::query()
             ->where('is_active', true)
+            ->whereHas('user', fn ($query) => $query->where('status', UserStatus::ACTIVE->value))
             ->findOrFail($request->integer('psychologist_id'));
 
         return new PublicAppointmentResource($this->service->createPublicRequest($psychologist, StoreAppointmentDTO::fromArray($request->validated())));

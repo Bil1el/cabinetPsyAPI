@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Public;
 
+use App\Enums\UserStatus;
 use App\Models\Psychologist;
 use App\Models\PsychologistAbsence;
 use App\Models\PsychologistWorkingHour;
@@ -77,6 +78,17 @@ class PublicBookingPrivacyTest extends TestCase
             $this->postJson('/api/public/appointments', $this->payload('inactive@example.test', $psychologistId))
                 ->assertNotFound();
         }
+    }
+
+    public function test_suspended_psychologists_are_not_bookable_or_available(): void
+    {
+        $this->psychologist->user->update(['status' => UserStatus::SUSPENDED]);
+        $date = $this->slot->toDateString();
+
+        $this->getJson("/api/psychologists/{$this->psychologist->id}/availability?date={$date}&type=in_person")
+            ->assertNotFound();
+        $this->postJson('/api/public/appointments', $this->payload())
+            ->assertNotFound();
     }
 
     private function payload(string $email = 'patient@example.test', Psychologist|int|null $psychologist = null): array

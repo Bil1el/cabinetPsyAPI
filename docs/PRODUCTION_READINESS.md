@@ -7,7 +7,7 @@
 - CSRF Sanctum actif pour les requêtes SPA stateful ; les routes publiques restent explicitement publiques.
 - CORS limité à `FRONTEND_URL`, avec credentials activés pour la SPA.
 - Limites distinctes : login, disponibilité, liste publique, réservation publique, upload de photo et flux de compte.
-- Les comptes professionnels ont un cycle `invited` / `active` / `suspended`; ce statut contrôle le dashboard tandis que `psychologists.is_active` contrôle séparément la visibilité et la réservation publiques.
+- Les comptes professionnels ont un cycle `invited` / `active` / `suspended`; disponibilité et réservation publiques exigent à la fois un compte `active` et `psychologists.is_active=true`. Ce dernier reste le commutateur de visibilité du profil, distinct de l’accès au dashboard.
 - Photos professionnelles stockées sur le disque public sous un nom généré, avec URL centralisée dans les Resources et suppression limitée au répertoire applicatif géré.
 - Réservation, remplacement d’horaires/mode et absences sérialisés par verrou psychologue sous MySQL/InnoDB.
 - Les erreurs API sont JSON et les conflits métier n’exposent pas de trace.
